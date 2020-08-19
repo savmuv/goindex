@@ -45,7 +45,7 @@ function init(){
     document.siteName = $('title').html();
     $('body').addClass("mdui-theme-primary-blue-grey mdui-theme-accent-blue");
     var html = `
-    <h1 id="heading">Home / <?php echo urldecode($path);?></h1>
+    <h1 id="heading">Home | <?php echo urldecode($path);?></h1>
     <table id="table">
     </table>
 	`;
@@ -75,7 +75,7 @@ function title(path){
 // 渲染导航栏
 function nav(path){
 	path = decodeURI(path);
-    $('#heading').html('Index of '+path);
+    $('#heading').html('Home | '+path);
 }
 
 // 渲染文件列表
