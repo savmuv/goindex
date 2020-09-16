@@ -1,9 +1,10 @@
 // =======Options START=======
 var authConfig = {
-    siteName: "GoIndex-theme-acrou", // 网站名称
-    version: "1.1.1", // 程序版本
+    siteName: "Goindex", // 网站名称
+    version: "1.1.2", // 程序版本
     theme: "acrou",
     // 强烈推荐使用自己的 client_id 和 client_secret
+  
     /**
      * 设置要显示的多个云端硬盘；按格式添加多个
      * [id]: 可以是 团队盘id、子文件夹id、或者"root"（代表个人盘根目录）；
@@ -17,7 +18,6 @@ var authConfig = {
      * 不需要 Basic Auth 的盘，保持 user 和 pass 同时为空即可。（直接不设置也可以）
      * 【注意】对于id设置为为子文件夹id的盘将不支持搜索功能（不影响其他盘）。
      */
-  
     default_gd: 0,
     /**
      * 文件列表页面每页显示的数量。【推荐设置值为 100 到 1000 之间】；
@@ -40,42 +40,45 @@ var authConfig = {
      * 如果在全局认证的基础上，仍需要给某些目录单独进行 .password 文件内的密码验证的话，将此选项设置为 true;
      * 【注意】如果开启了 .password 文件密码验证，每次列目录都会额外增加查询目录内 .password 文件是否存在的开销。
      */
-    enable_password_file_verify: false,
+    enable_password_file_verify: false
   };
   
+    var accounts = [
+        {
+          id: "root",
+          name: "Google Drive 1",
+          user: "",
+          pass: "",
+          protect_file_link: false,
+          client_id: '',
+          client_secret: '',
+          refresh_token: ''
+        },
+        {
+          id: "root",
+          name: "Google Drive 2",
+          user: "",
+          pass: "",
+          protect_file_link: false,
+          client_id: "",
+          client_secret: "",
+          refresh_token: ""
+        }
+        // {
+        //   id: "root",
+        //   name: "Google Drive 3",
+        //   pass: "",
+        //   client_id: "",
+        //   client_secret: "",
+        //   refresh_token: ""
+        // },
+      ]
   
-  var accounts = [
-      {
-        id: "root",
-        name: "Drive 1",
-        user: "",
-        pass: "",
-        protect_file_link: false,
-        client_id: "",
-        client_secret: "",
-        refresh_token: ""
-      },
-      {
-        id: "root",
-        name: "Drive 2",
-        user: "1234",
-        pass: "1234",
-        protect_file_link: true,
-        client_id: "",
-        client_secret: "",
-        refresh_token: ""
-      },
-      {
-        id: "",
-        name: "Drive 3",
-        pass: "",
-      },
-    ]
   
   var themeOptions = {
-  cdn: "https://cdn.jsdelivr.net/gh/alx-xlx/goindex",
-  // 主题版本号
-  version: "2.0.5-darkmode-0.1",
+    cdn: "https://cdn.jsdelivr.net/gh/alx-xlx/goindex",
+    // 主题版本号
+    version: "2.0.8-darkmode-0.1",
     //可选默认系统语言:en/zh-chs/zh-cht
     languages: "en",
     render: {
@@ -96,16 +99,22 @@ var authConfig = {
       desc: false,
     },
     /**
-     * 播放器选项
-     * Player options
+     * 视频播放器选项
+     * Video player options
      */
-    player: {
+    video: {
       /**
-       * 播放器api（不指定则使用浏览器默认播放器）
-       * Player api(Use browser default player if not specified)
+       * 播放器api（不指定则使用默认播放器）
+       * Player api(Use default player if not specified)
        */
-      api: "https://api.jsonpop.cn/demo/blplyaer/?url=",
+      api: "",
+      autoplay: true,
     },
+    /**
+     * 音频播放器选项
+     * Audio player options
+     */
+    audio: {},
   };
   // =======Options END=======
   
@@ -116,7 +125,7 @@ var authConfig = {
     /**
      * 转换成针对谷歌搜索词法相对安全的搜索关键词
      */
-    formatSearchKeyword: function (keyword) {
+    formatSearchKeyword: function(keyword) {
       let nothing = "";
       let space = " ";
       if (!keyword) return nothing;
@@ -150,26 +159,10 @@ var authConfig = {
   <!DOCTYPE html>
   <html>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
-    <title>${authConfig.siteName}</title>
-    <style>
-      @import url(${themeOptions.cdn}@${themeOptions.version}/goindex-acrou/dist/style.min.css);
-    </style>
-    <script>
-      window.gdconfig = JSON.parse('${JSON.stringify({
-        version: authConfig.version,
-        themeOptions: themeOptions,
-      })}');
-      window.themeOptions = JSON.parse('${JSON.stringify(themeOptions)}');
-      window.gds = JSON.parse('${JSON.stringify(
-        accounts.map((it) => it.name)
-      )}');
-      window.MODEL = JSON.parse('${JSON.stringify(model)}');
-      window.current_drive_order = ${current_drive_order};
-    </script>
+  <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/> <title>${authConfig.siteName}</title> <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1"><meta name="description" content="Combining the power of Cloudflare Workers and Google Drive will allow you to index your files on the browser on Cloudflare Workers."><meta name="theme-color" content="#FF3300"><meta name="application-name" content="goindex"><meta name="robots" content="index, follow"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://i.imgur.com/rOyuGjA.gif"><meta name="twitter:description" content="Combining the power of Cloudflare Workers and Google Drive will allow you to index your files on the browser on Cloudflare Workers."><meta name="keywords" content="goindex, google, drive, goindex, gdindex, classic, material, workers-script, oauth-consent-screen, google-drive, cloudflare-workers, themes"><meta name="twitter:title" content="Goindex"><meta name="twitter:url" content="https://github.com/alx-xlx/goindex"><link rel="shortcut icon" href="https://i.imgur.com/rOyuGjA.gif"><meta property="og:site_name" content="Goindex"><meta property="og:type" content="website"><meta property="og:image" content="https://i.imgur.com/rOyuGjA.gif"><meta property="og:description" content="Combining the power of Cloudflare Workers and Google Drive will allow you to index your files on the browser on Cloudflare Workers."><meta property="og:title" content="Goindex"><meta property="og:url" content="https://github.com/alx-xlx/goindex"><link rel="apple-touch-icon" href="https://i.imgur.com/rOyuGjA.gif"><link rel="icon" type="image/png" sizes="32x32" href="https://i.imgur.com/rOyuGjA.gif"><meta name="google-site-verification" content="OD_AXMYw-V6ID9xQUb2Wien9Yy8IJSyfBUyejYNB3CU"/><script async src="https://www.googletagmanager.com/gtag/js?id=UA-86099016-6"></script><script>window.dataLayer=window.dataLayer || []; function gtag(){dataLayer.push(arguments);}gtag('js', new Date()); gtag('config', 'UA-86099016-6');</script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-MR47R4M');</script> <style>@import url(${themeOptions.cdn}@${themeOptions.version}/goindex-acrou/dist/style.min.css); </style> <script>window.gdconfig=JSON.parse('${JSON.stringify({version: authConfig.version, themeOptions: themeOptions,})}'); window.themeOptions=JSON.parse('${JSON.stringify(themeOptions)}'); window.gds=JSON.parse('${JSON.stringify(accounts.map((it)=> it.name) )}'); window.MODEL=JSON.parse('${JSON.stringify(model)}'); window.current_drive_order=${current_drive_order}; </script>
   </head>
   <body>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MR47R4M"height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div id="app"></div>
       <script src="${themeOptions.cdn}@${
       themeOptions.version
@@ -189,14 +182,14 @@ var authConfig = {
    */
   async function handleRequest(request) {
     if (gds.length === 0) {
-      for (let i = 0; i < this.accounts.length; i++) {
-        let authConfig = {
-          ...this.authConfig,
-          ...this.accounts[i]
+        for (let i = 0; i < this.accounts.length; i++) {
+          let authConfig = {
+            ...this.authConfig,
+            ...this.accounts[i]
+          }
+          const gd = new googleDrive(authConfig, i);
+          gds.push(gd);
         }
-        const gd = new googleDrive(authConfig, i);
-        gds.push(gd);
-      }
       // 这个操作并行，提高效率
       let tasks = [];
       gds.forEach((gd) => {
@@ -318,7 +311,12 @@ var authConfig = {
         })
       );
     } else {
-      if (path.split("/").pop().toLowerCase() == ".password") {
+      if (
+        path
+          .split("/")
+          .pop()
+          .toLowerCase() == ".password"
+      ) {
         return basic_auth_res || new Response("", { status: 404 });
       }
       let file = await gd.file(path);
@@ -403,8 +401,8 @@ var authConfig = {
     constructor(authConfig, order) {
       // 每个盘对应一个order，对应一个gd实例
       this.order = order;
-      this.accounts = accounts[order];
-      this.protect_file_link = this.protect_file_link || false;
+        this.accounts = accounts[order];
+        this.protect_file_link = this.protect_file_link || false;
       this.url_path_prefix = `/${order}:`;
       this.authConfig = authConfig;
       // TODO: 这些缓存的失效刷新策略，后期可以制定一下
@@ -588,7 +586,7 @@ var authConfig = {
       params.q = `'${parent}' in parents and trashed = false AND name !='.password'`;
       params.orderBy = "folder,name,modifiedTime desc";
       params.fields =
-        "nextPageToken, files(id, name, mimeType, size , modifiedTime, thumbnailLink, description)";
+        "nextPageToken, files(name, mimeType, size , modifiedTime, thumbnailLink, description)";
       params.pageSize = this.authConfig.files_list_page_size;
   
       if (page_token) {
@@ -693,7 +691,7 @@ var authConfig = {
       }
       if (is_share_drive) {
         params.corpora = "drive";
-        params.driveId = thisaccountsid;
+        params.driveId = this.accounts.id;
         // This parameter will only be effective until June 1, 2020. Afterwards shared drive items will be included in the results.
         params.includeItemsFromAllDrives = true;
         params.supportsAllDrives = true;
@@ -703,7 +701,7 @@ var authConfig = {
       }
       params.q = `trashed = false AND name !='.password' AND (${name_search_str})`;
       params.fields =
-        "nextPageToken, files(id, name, mimeType, size , modifiedTime, thumbnailLink, description)";
+        "nextPageToken, files(name, mimeType, size , modifiedTime, thumbnailLink, description)";
       params.pageSize = this.authConfig.search_result_list_page_size;
       // params.orderBy = 'folder,name,modifiedTime desc';
   
@@ -733,7 +731,7 @@ var authConfig = {
      */
     async findParentFilesRecursion(child_id, contain_myself = true) {
       const gd = this;
-      const gd_root_id = gdaccountsid;
+      const gd_root_id = gd.accounts.id;
       const user_drive_real_root_id = authConfig.user_drive_real_root_id;
       const is_user_drive = gd.root_type === CONSTS.gd_root_type.user_drive;
   
@@ -939,9 +937,9 @@ var authConfig = {
     }
   
     sleep(ms) {
-      return new Promise(function (resolve, reject) {
+      return new Promise(function(resolve, reject) {
         let i = 0;
-        setTimeout(function () {
+        setTimeout(function() {
           console.log("sleep" + ms);
           i++;
           if (i >= 2) reject(new Error("i>=2"));
@@ -951,7 +949,7 @@ var authConfig = {
     }
   }
   
-  String.prototype.trim = function (char) {
+  String.prototype.trim = function(char) {
     if (char) {
       return this.replace(
         new RegExp("^\\" + char + "+|\\" + char + "+$", "g"),
@@ -960,3 +958,4 @@ var authConfig = {
     }
     return this.replace(/^\s+|\s+$/g, "");
   };
+  
